@@ -11,7 +11,7 @@ The method's signature is as follows:  public static int[] copyOf(int[] array)
 class ArrayOp{
 	
 	public static int[] copyOf(int[] array) {
-		return Arrays.copyOf(array, array.length);
+		return null;
 	}
 	
 }

@@ -5,7 +5,22 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2022-07-05T09:00:00Z</updated>
+  <updated>2022-07-07T08:32:40Z</updated>
+  <entry>
+    <title>Spring Shell 2.1.0-RC1 is now available</title>
+    <link rel="alternate" href="https://spring.io/blog/2022/07/07/spring-shell-2-1-0-rc1-is-now-available" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Janne Valkealahti</name>
+    </author>
+    <id>tag:spring.io,2022-07-07:4847</id>
+    <updated>2022-07-07T08:32:40Z</updated>
+    <content type="html">&lt;p&gt;On behalf of the team and everyone who has contributed, I&amp;rsquo;m happy to announce that Spring Shell &lt;code&gt;2.1.0-RC1&lt;/code&gt; has been released and is now available from &lt;a href="https://repo.spring.io/milestone"&gt;https://repo.spring.io/milestone&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Please see the &lt;a href="https://github.com/spring-projects/spring-shell/releases/tag/v2.1.0-RC1"&gt;release notes&lt;/a&gt; for more details.&lt;/p&gt;
+&lt;p&gt;Thanks to all those who have contributed with issue reports and pull requests.&lt;/p&gt;&lt;h3&gt;&lt;a href="#how-can-you-help" class="anchor" name="how-can-you-help"&gt;&lt;/a&gt;How can you help?&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://spring.io/projects/spring-shell/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-shell"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-shell/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-shell/docs/2.1.0-RC1/site/reference/htmlsingle"&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
   <entry>
     <title>This Week in Spring - July 5th, 2022</title>
     <link rel="alternate" href="https://spring.io/blog/2022/07/05/this-week-in-spring-july-5th-2022" />
@@ -820,20 +835,6 @@ compile &amp;#39;org.springframework.cloud:spring-cloud-starter-netflix-eureka-c
 &lt;p&gt;Detailed changes can be found here: &lt;a href="https://github.com/spring-projects/sts4/wiki/Changelog#2022-06-15-4150-release-incl-language-servers-version-1340"&gt;https://github.com/spring-projects/sts4/wiki/Changelog#2022-06-15-4150-release-incl-language-servers-version-1340&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Spring Tools 4.15.1 is scheduled to be released in early August 2022.&lt;/p&gt;
 &lt;p&gt;Enjoy!&lt;/p&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Framework 5.3.21 available now</title>
-    <link rel="alternate" href="https://spring.io/blog/2022/06/15/spring-framework-5-3-21-available-now" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>Stéphane Nicoll</name>
-    </author>
-    <id>tag:spring.io,2022-06-15:4827</id>
-    <updated>2022-06-15T09:04:18Z</updated>
-    <content type="html">&lt;p&gt;On behalf of the team and everyone who has contributed, I am pleased to announce that Spring Framework &lt;code&gt;5.3.21&lt;/code&gt; is available now.&lt;/p&gt;
-&lt;p&gt;Spring Framework &lt;code&gt;5.3.21&lt;/code&gt; includes &lt;a href="https://github.com/spring-projects/spring-framework/releases/tag/v5.3.21"&gt;22 fixes and improvements&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://projects.spring.io/spring-framework/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-framework"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-framework/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-framework/docs/5.3.21/reference/html/"&gt;Documentation&lt;/a&gt;&lt;/p&gt;
 &lt;!-- rendered by Sagan Renderer Service --&gt;</content>
   </entry>
 </feed>
