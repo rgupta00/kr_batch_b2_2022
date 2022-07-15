@@ -1,38 +1,61 @@
 package com.b.classical_threads2;
 
-class Printer{
-	public  void print(String letter){
-		System.out.print("[");
-		try{
-			Thread.sleep(100);
-		}catch(InterruptedException e){}
-		System.out.println(letter + "]");
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+class Printer {
+	// c1, c2 , c3
+	// private Object ob=new Object();
+	private Lock lock = new ReentrantLock(true);
+
+	public void print(String letter) {
+		//
+		///
+
+		try {
+			lock.lock();
+			System.out.print("[");
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+			System.out.println(letter + "]");
+		} finally {
+			lock.unlock();
+		}
+
+		//
+		//
+
 	}
 }
-class Client extends Thread{
+
+class Client extends Thread {
 	private Thread thread;
 	private Printer printer;
 	private String letter;
-	
-	public Client(Printer printer, String letter){
-		this.printer=printer;
-		this.letter=letter;
-		thread=new Thread(this);
+
+	public Client(Printer printer, String letter) {
+		this.printer = printer;
+		this.letter = letter;
+		thread = new Thread(this);
 		thread.start();
 	}
-	public void run(){
+
+	public void run() {
 		printer.print(letter);
 	}
 }
+
 public class B_NeedOfSyn {
-	
+
 	public static void main(String[] args) {
-		
-		Printer printer=new Printer();
-		Client client1=new Client(printer, "i love java");
-		Client client2=new Client(printer, "i hate java");
-		Client client3=new Client(printer, "i love india");
-		
+
+		Printer printer = new Printer();
+		Client client1 = new Client(printer, "i love java");
+		Client client2 = new Client(printer, "i hate java");
+		Client client3 = new Client(printer, "i love india");
+
 	}
 
 }
