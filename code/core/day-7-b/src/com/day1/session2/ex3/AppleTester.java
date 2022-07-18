@@ -20,8 +20,33 @@ public class AppleTester {
 		
 		public static void main(String[] args) {
 
-		List<Apple> apples = Arrays.asList(new Apple("red", 400), new Apple(
-				"green", 300), new Apple("green", 200), new Apple("red", 250));
+		List<Apple> apples =
+				Arrays.asList(
+						new Apple("red", 400),
+						new Apple("green", 300), 
+						new Apple("green", 200),
+						new Apple("red", 250));
+		//heavy apples
+		
+//		List<Apple> applesHeavy=AppleApp.getHeavyApples(apples);
+//		List<Apple> applesGreen=AppleApp.getGreenApples(apples);
+		
+//		Predicate<Apple> heavyPredicate= a-> a.getWeight()>=300;
+		//Predicate<Apple> heavyPredicate= Apple::isHeavy;
+		Predicate<Apple> heavyPredicateUsingStaticMethod= AppleHelper::isHeavy;
+		
+		List<Apple> applesHeavy=AppleApp.getApplesOnPredicate(apples, heavyPredicateUsingStaticMethod);
+		
+		Predicate<Apple> greenPredicate= a-> a.getColor().equals("green");
+		List<Apple> greenHeavy=AppleApp.getApplesOnPredicate(apples, greenPredicate);
+		
+		Predicate<Apple> heavyAndGreeenPredicate=
+				heavyPredicateUsingStaticMethod.and(greenPredicate);
+		
+		
+		List<Apple> greenAndHeavyHeavy=
+				AppleApp.getApplesOnPredicate(apples, heavyAndGreeenPredicate);
+		
 		
 		//Most imp functional interface in java 8
 		

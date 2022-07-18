@@ -2,7 +2,7 @@ package com.day1.session2.ex5;
 
 import java.util.List;
 
-class Book {
+class Book implements Comparable<Book>{
 	private String title;
 	private List<Author> authors;
 	private int pages;
@@ -61,6 +61,10 @@ class Book {
 		return "Book [title=" + title + ", authors=" + authors + ", pages="
 				+ pages + ", subject=" + subject + ", year=" + year + ", isbn="
 				+ isbn + "]";
+	}
+	@Override
+	public int compareTo(Book o) {
+		return this.getIsbn().compareTo(o.getIsbn());
 	}
 	
 	

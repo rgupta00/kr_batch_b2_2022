@@ -1,16 +1,24 @@
 package com.day1.session1.ex2;
 
-public class Book {
+public class Book implements Comparable<Book>{
 	private int id;
 	private String title;
 	private String author;
 	private double price;
+							//T
+			//boolean
+	public boolean pricyBook() {
+		return price>=250;
+	}
+	
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	//						this
+	      //String
 	public String getTitle() {
 		return title;
 	}
@@ -44,6 +52,10 @@ public class Book {
 	public Book() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public int compareTo(Book o) {
+		return Integer.compare(this.getId(), o.getId());
 	}
 	
 	
