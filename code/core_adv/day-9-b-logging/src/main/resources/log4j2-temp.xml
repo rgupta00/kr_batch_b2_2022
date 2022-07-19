@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+	<Properties>
+		<Property name="filename">./demo</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="file" fileName="${filename}"
+			filePattern="${filename}/logdemo-%d{HH-mm-ss-SSS}.log">
+			<PatternLayout>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</pattern>
+			</PatternLayout>
+			<SizeBasedTriggeringPolicy size="1 KB" />
+		</RollingFile>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.bookapp.dao" level="info" additivity="false">
+			<AppenderRef ref="file" />
+		</Logger>
+		<Root level="info" additivity="false">
+			<AppenderRef ref="console" />
+		</Root>
+	</Loggers>
+</Configuration>
