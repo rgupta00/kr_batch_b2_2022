@@ -1,0 +1,2 @@
+INFO  | 2022-07-20 16:21:00 | [main] foo.DemoCodeFoo (DemoCodeFoo.java:12) - some sample log
+ERROR | 2022-07-20 16:21:00 | [main] foo.DemoCodeFoo (DemoCodeFoo.java:17) - some error java.lang.NumberFormatException: For input string: "1A"
