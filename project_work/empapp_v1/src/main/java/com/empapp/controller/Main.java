@@ -9,8 +9,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		EmployeeService employeeService=new EmployeeServiceImpl();
-		//List<Employee> employees=employeeService.getAll();
-		//employees.forEach(e-> System.out.println(e));
+		List<Employee> employees=employeeService.getAll();
+		employees.stream().map(e-> e.getName()).forEach(en-> System.out.println(en));
 		
 		//add new employee
 //		Employee employee=new Employee("sanjeev", 50000);
