@@ -1,0 +1,1 @@
+INFO  | 2022-07-22 14:56:58 | [main] service.EmployeeServiceImpl (EmployeeServiceImpl.java:31) - method getAll take :12488430 ns to execute
