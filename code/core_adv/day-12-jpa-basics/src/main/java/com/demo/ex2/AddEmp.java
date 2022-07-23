@@ -1,4 +1,6 @@
-package com.demo;
+package com.demo.ex2;
+
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,6 +19,12 @@ public class AddEmp {
 
 		Employee employee = new Employee("ramesh", 59000);
 
+		employee.setDataOfBith(new Date());
+		employee.setEmpType(EmpType.DEV);
+		employee.addPhone("7655676776");
+		employee.addPhone("7650076776");
+		employee.setTempPassword("fdfgf#122");
+		
 		EntityTransaction tx = em.getTransaction();
 		try {
 

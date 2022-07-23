@@ -1,11 +1,11 @@
-package com.demo;
+package com.demo.ex2;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-public class AddEmp {
+public class DeleteEmp {
 
 	public static void main(String[] args) {
 
@@ -15,14 +15,13 @@ public class AddEmp {
 
 		// i want to save a employee object
 
-		Employee employee = new Employee("ramesh", 59000);
-
+		
 		EntityTransaction tx = em.getTransaction();
 		try {
 
 			tx.begin();
-			
-			em.persist(employee);
+			Employee empToDelete=em.find(Employee.class, 7);
+			em.remove(empToDelete);
 			
 			tx.commit();
 		} catch (Exception e) {

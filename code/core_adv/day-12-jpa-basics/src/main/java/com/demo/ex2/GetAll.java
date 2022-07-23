@@ -1,4 +1,4 @@
-package com.demo;
+package com.demo.ex2;
 import java.util.*;
 import java.util.*;
 import javax.persistence.EntityManager;
