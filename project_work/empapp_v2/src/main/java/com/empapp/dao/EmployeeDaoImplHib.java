@@ -19,6 +19,7 @@ public class EmployeeDaoImplHib implements EmployeeDao {
 
 	@Override
 	public List<Employee> getAll() {
+		System.out.println("-------hibernate wala dao layer----------");
 		EntityManager em = emf.createEntityManager();
 		List<Employee> employees = em.createQuery("select e from Employee e", Employee.class).getResultList();
 		em.close();

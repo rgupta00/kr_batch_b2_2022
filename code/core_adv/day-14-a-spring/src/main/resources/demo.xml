@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- is spring follow some design pattern
+	1. singleton(mostly used) vs Prototype
+	2. eager vs lazy fetching  lazy-init="false"
+	
+	2 type of injection: ctr vs setter
+	<constructor-arg index="0" ref="bookDao1"/>
+	<property name="bookDao" ref="bookDao1"/>
+	
+	Autowrining: aka shortcut
+	 -->
+	<bean id="bookService" class="com.bookapp.service.BookServiceImpl" autowire="byType"/>
+	
+	<bean id="bookDao1" class="com.bookapp.dao.BookDaoImplJdbc" primary="true"/>
+	<bean id="bookDao2" class="com.bookapp.dao.BookDaoImplAL"/>
+
+</beans>

@@ -17,6 +17,7 @@ public class EmployeeDaoJdbcImpl implements EmployeeDao {
 
 	@Override
 	public List<Employee> getAll() {
+		System.out.println("-------jdbc wala dao layer----------");
 		//how to get auto gen id from db
 		Statement statement;
 		List<Employee> employees = new ArrayList<Employee>();

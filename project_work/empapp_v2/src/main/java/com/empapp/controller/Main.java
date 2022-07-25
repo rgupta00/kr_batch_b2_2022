@@ -21,7 +21,7 @@ public class Main {
 		//employeeService.updateEmployee(10, 60000);
 		
 		//delete
-		employeeService.deleteEmployee(100);
+		//employeeService.deleteEmployee(100);
 	}
 
 }

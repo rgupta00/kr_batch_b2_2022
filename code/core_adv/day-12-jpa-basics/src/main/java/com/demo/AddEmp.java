@@ -15,7 +15,7 @@ public class AddEmp {
 
 		// i want to save a employee object
 
-		Employee employee = new Employee("ramesh", 59000);
+		Employee employee = new Employee("nitin gupta", 59000);
 
 		EntityTransaction tx = em.getTransaction();
 		try {

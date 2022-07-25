@@ -18,7 +18,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeDao employeeDao;
 
 	public EmployeeServiceImpl() {
-		employeeDao = new EmployeeDaoImplHib();
+		employeeDao = new EmployeeDaoJdbcImpl();
 	}
 
 	@Override

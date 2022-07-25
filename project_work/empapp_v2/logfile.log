@@ -111,3 +111,20 @@ INFO  | 2022-07-23 15:24:08 | [main] internal.LobCreatorBuilderImpl (LobCreatorB
 INFO  | 2022-07-23 15:24:09 | [main] internal.DdlTransactionIsolatorNonJtaImpl (DdlTransactionIsolatorNonJtaImpl.java:47) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@77e2a6e2] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
 INFO  | 2022-07-23 15:24:09 | [main] internal.QueryTranslatorFactoryInitiator (QueryTranslatorFactoryInitiator.java:47) - HHH000397: Using ASTQueryTranslatorFactory
 INFO  | 2022-07-23 15:24:09 | [main] service.EmployeeServiceImpl (EmployeeServiceImpl.java:32) - method getAll take :204159848 ns to execute
+INFO  | 2022-07-25 16:27:25 | [main] util.LogHelper (LogHelper.java:31) - HHH000204: Processing PersistenceUnitInfo [
+	name: kronos_pu
+	...]
+INFO  | 2022-07-25 16:27:25 | [main] hibernate.Version (Version.java:45) - HHH000412: Hibernate Core {5.2.9.Final}
+INFO  | 2022-07-25 16:27:25 | [main] cfg.Environment (Environment.java:213) - HHH000206: hibernate.properties not found
+INFO  | 2022-07-25 16:27:25 | [main] java.JavaReflectionManager (JavaReflectionManager.java:66) - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+WARN  | 2022-07-25 16:27:25 | [main] internal.DriverManagerConnectionProviderImpl (DriverManagerConnectionProviderImpl.java:70) - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+INFO  | 2022-07-25 16:27:25 | [main] internal.DriverManagerConnectionProviderImpl (DriverManagerConnectionProviderImpl.java:126) - HHH10001005: using driver [org.postgresql.Driver] at URL [jdbc:postgresql://localhost:5432/krbatch2]
+INFO  | 2022-07-25 16:27:25 | [main] internal.DriverManagerConnectionProviderImpl (DriverManagerConnectionProviderImpl.java:135) - HHH10001001: Connection properties: {user=postgres, password=****}
+INFO  | 2022-07-25 16:27:25 | [main] internal.DriverManagerConnectionProviderImpl (DriverManagerConnectionProviderImpl.java:140) - HHH10001003: Autocommit mode: false
+INFO  | 2022-07-25 16:27:25 | [main] internal.PooledConnections (PooledConnections.java:41) - HHH000115: Hibernate connection pool size: 20 (min=1)
+INFO  | 2022-07-25 16:27:26 | [main] dialect.Dialect (Dialect.java:157) - HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL81Dialect
+INFO  | 2022-07-25 16:27:26 | [main] internal.LobCreatorBuilderImpl (LobCreatorBuilderImpl.java:124) - HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+INFO  | 2022-07-25 16:27:26 | [main] internal.DdlTransactionIsolatorNonJtaImpl (DdlTransactionIsolatorNonJtaImpl.java:47) - HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@64d7b720] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+INFO  | 2022-07-25 16:27:27 | [main] internal.QueryTranslatorFactoryInitiator (QueryTranslatorFactoryInitiator.java:47) - HHH000397: Using ASTQueryTranslatorFactory
+INFO  | 2022-07-25 16:27:27 | [main] service.EmployeeServiceImpl (EmployeeServiceImpl.java:32) - method getAll take :182775549 ns to execute
+INFO  | 2022-07-25 16:28:34 | [main] service.EmployeeServiceImpl (EmployeeServiceImpl.java:32) - method getAll take :14020678 ns to execute
