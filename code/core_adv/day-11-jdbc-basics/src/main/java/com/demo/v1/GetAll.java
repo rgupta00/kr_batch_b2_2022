@@ -5,7 +5,7 @@ import java.sql.*;
 public class GetAll {
 
 	public static void main(String[] args) {
-
+		System.out.println("hello");
 		try (Connection connection = ConnectionFactory.getConnection()) {
 
 			Statement statement = connection.createStatement();
