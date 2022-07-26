@@ -1,0 +1,342 @@
+
+
+Spring boot rest:
+----------------
+
+1 hello world
+---------------
+1. create spring boot with Spring mvc dependency
+
+2. create the dir structure
+
+	com.empapp.api
+	com.empapp.service
+
+
+3. dao layer
+---------------
+public class Employee {
+	private int id;
+	private String name;
+	private double salary;
+	//getter setter etc
+}
+	
+
+
+3. service layer
+------------------------
+public interface EmployeeService {
+
+	public List<Employee> getAll();
+}
+
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService{
+
+	@Override
+	public List<Employee> getAll() {
+	
+		return Arrays.asList(new Employee(1, "raj",	4999),new Employee(12, "ekta",	4299));
+	}
+}
+
+
+4 rest api layer
+--------------------
+
+@RequestMapping(path = "api")
+@RestController
+public class EmployeeApi {
+
+	public EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+	@GetMapping(path = "employees")
+	public List<Employee> getAll(){
+		return  employeeService.getAll();
+	}
+	
+}
+
+
+5. change into application.propertity file
+--------------------------------------------
+server.port=8090
+server.servlet.context-path=/empapp
+
+
+6. run this project and test rest endpoint
+--------------------------------------------
+http://localhost:8090/empapp/api/employees
+
+it works :
+
+7. install postman and try same endpoint with it
+-------------------------------------------
+:)
+
+----------------------------------------------------------------------------------------
+	app 2: api -------------------- service ------------repository (dao)-------- postgress
+--------------------------------------------------------------------------------------------
+
+step 1: create a new spring boot app
+	jpa
+	lombok
+	devtool
+	postgres
+	spring mvc
+	//jersey
+
+
+step 2: copy config for database to application.properties file
+----------------------------------------------------------------
+server.servlet.context-path=/empapp
+server.port=8082
+spring.datasource.url=jdbc:postgresql://localhost:5432/krbatch1
+spring.datasource.username=postgres
+spring.datasource.password=raj123
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+spring.jpa.hibernate.ddl-auto=validate
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: INFO
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+
+step 3: we create declartive dao layer : spring data :)
+------------------------------------------------------
+
+@Entity
+@Table(name = "emp")
+public class Employee {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String name;
+	private double salary;
+}
+
+
+//declartive dao layer: i can also add new method into this
+
+@Repository
+public interface EmployeeDao extends JpaRepository<Employee, Integer> {
+
+}
+
+
+step 4: just autowire this dao to service layer
+--------------------------------------------
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	private EmployeeDao employeeDao;
+
+	@Autowired
+	public EmployeeServiceImpl(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
+	@Override
+	public List<Employee> getAll() {
+		return employeeDao.findAll();
+	}
+
+}
+
+
+step 5: run it and try on postman
+http://localhost:8090/empapp/api/employees
+
+
+
+----------------------------------------------------------------------------------------
+	app 3: api -------------------- service ------------repository (dao)-------- postgress
+--------------------------------------------------------------------------------------------
+
+
+
+
+now we want to write complete crud rest end point:
+-----------------------------------------------
+1. udpate service interface 
+-----------------------
+
+public interface EmployeeService {
+
+	public List<Employee> getAll();
+	public Employee updateEmployee(int id, double salary);
+	public Employee getById(int id);
+	public Employee deleteEmployee(int id);
+	public List<Employee> getByName(String name);
+	public Employee addEmployee(Employee employee);
+}
+
+2. write impl
+----------------
+
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	private EmployeeDao employeeDao;
+
+	@Autowired
+	public EmployeeServiceImpl(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
+	@Override
+	public List<Employee> getAll() {
+		return employeeDao.findAll();
+	}
+
+	@Override
+	public Employee updateEmployee(int id, double salary) {
+		Employee empToUpdate = getById(id);
+		empToUpdate.setSalary(salary);
+		employeeDao.save(empToUpdate);// REMEBER : FOR UPDATE AND ADD SAME METHOD : save()
+		return empToUpdate;
+	}
+
+	@Override
+	public Employee getById(int id) {
+		Employee emp = employeeDao.findById(id)
+				.orElseThrow(() -> new EmployeeNotFoundException("emp with id " + id + " is not found"));
+		return emp;
+	}
+
+	@Override
+	public Employee deleteEmployee(int id) {
+		Employee empToDelete = getById(id);
+		employeeDao.delete(empToDelete);
+		return empToDelete;
+	}
+
+	@Override
+	public List<Employee> getByName(String name) {
+		return employeeDao.findByName(name);
+	}
+
+	@Override
+	public Employee addEmployee(Employee employee) {
+		employeeDao.save(employee);
+		return employee;
+
+	}
+
+}
+
+3. write user define ex too
+------------------------------
+
+public class EmployeeNotFoundException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+
+	public EmployeeNotFoundException(String message) {
+		super(message);
+	}
+}
+
+4. udate the controller to support rest endpoints
+---------------------------------------------------
+@RequestMapping(path = "api")
+
+@RestController// @Controller+@ResponseBody
+public class EmployeeApi {
+
+	public EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+	//parser: java<--> json jakson
+	@GetMapping(path = "employees")
+	public List<Employee> getAll(){
+		return  employeeService.getAll();
+	}
+	//http://localhost:8090/empapp/api/employees/7
+	@GetMapping(path = "employees/{id}")
+	public Employee getAnEmployee(@PathVariable(name = "id")  int id){
+		return  employeeService.getById(id);
+	}
+	//from postman i will pass json of employee object --> java objet
+	//how to tell spring rest to do so @RequestBody
+	//post 
+	@PostMapping(path = "employees")
+	public Employee addEmployee(@RequestBody  Employee employee) {
+		return employeeService.addEmployee(employee);
+	}
+	//put mapping
+	@PutMapping(path = "employees/{id}")
+	public Employee updateEmployee(@PathVariable(name = "id") int id,  @RequestBody  Employee employee) {
+		return employeeService.addEmployee(employee);
+	}
+	@DeleteMapping(path = "employees/{id}")
+	public Employee deleteAnEmployee(@PathVariable(name = "id")  int id){
+		return  employeeService.deleteEmployee(id);
+	}
+	
+}
+
+
+Step 5: test the crud end point using postman
+--------------------------------------------------
+
+
+We have create rest end point using spring REST ( which dont follow any jsr)
+
+
+kronos they use jersey framework used to create REST api (based on jsr)
+
+
+JAX RS : java api for xml rest web service
+--------------------------------------------
+	jersey is a impl of JAX RS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
