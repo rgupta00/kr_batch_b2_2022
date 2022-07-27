@@ -1,0 +1,472 @@
+
+
+Spring boot rest:
+----------------
+
+1 hello world
+---------------
+1. create spring boot with Spring mvc dependency
+
+2. create the dir structure
+
+	com.empapp.api
+	com.empapp.service
+
+
+3. dao layer
+---------------
+public class Employee {
+	private int id;
+	private String name;
+	private double salary;
+	//getter setter etc
+}
+	
+
+
+3. service layer
+------------------------
+public interface EmployeeService {
+
+	public List<Employee> getAll();
+}
+
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService{
+
+	@Override
+	public List<Employee> getAll() {
+	
+		return Arrays.asList(new Employee(1, "raj",	4999),new Employee(12, "ekta",	4299));
+	}
+}
+
+
+4 rest api layer
+--------------------
+
+@RequestMapping(path = "api")
+@RestController
+public class EmployeeApi {
+
+	public EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+	@GetMapping(path = "employees")
+	public List<Employee> getAll(){
+		return  employeeService.getAll();
+	}
+	
+}
+
+
+5. change into application.propertity file
+--------------------------------------------
+server.port=8090
+server.servlet.context-path=/empapp
+
+
+6. run this project and test rest endpoint
+--------------------------------------------
+http://localhost:8090/empapp/api/employees
+
+it works :
+
+7. install postman and try same endpoint with it
+-------------------------------------------
+:)
+
+----------------------------------------------------------------------------------------
+	app 2: api -------------------- service ------------repository (dao)-------- postgress
+--------------------------------------------------------------------------------------------
+
+step 1: create a new spring boot app
+	jpa
+	lombok
+	devtool
+	postgres
+	spring mvc
+	//jersey
+
+
+step 2: copy config for database to application.properties file
+----------------------------------------------------------------
+server.servlet.context-path=/empapp
+server.port=8082
+spring.datasource.url=jdbc:postgresql://localhost:5432/krbatch1
+spring.datasource.username=postgres
+spring.datasource.password=raj123
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+spring.jpa.hibernate.ddl-auto=validate
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: INFO
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+
+step 3: we create declartive dao layer : spring data :)
+------------------------------------------------------
+
+@Entity
+@Table(name = "emp")
+public class Employee {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String name;
+	private double salary;
+}
+
+
+//declartive dao layer: i can also add new method into this
+
+@Repository
+public interface EmployeeDao extends JpaRepository<Employee, Integer> {
+
+}
+
+
+step 4: just autowire this dao to service layer
+--------------------------------------------
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	private EmployeeDao employeeDao;
+
+	@Autowired
+	public EmployeeServiceImpl(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
+	@Override
+	public List<Employee> getAll() {
+		return employeeDao.findAll();
+	}
+
+}
+
+
+step 5: run it and try on postman
+http://localhost:8090/empapp/api/employees
+
+
+
+----------------------------------------------------------------------------------------
+	app 3: api -------------------- service ------------repository (dao)-------- postgress
+--------------------------------------------------------------------------------------------
+
+
+
+
+now we want to write complete crud rest end point:
+-----------------------------------------------
+1. udpate service interface 
+-----------------------
+
+public interface EmployeeService {
+
+	public List<Employee> getAll();
+	public Employee updateEmployee(int id, double salary);
+	public Employee getById(int id);
+	public Employee deleteEmployee(int id);
+	public List<Employee> getByName(String name);
+	public Employee addEmployee(Employee employee);
+}
+
+2. write impl
+----------------
+
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	private EmployeeDao employeeDao;
+
+	@Autowired
+	public EmployeeServiceImpl(EmployeeDao employeeDao) {
+		this.employeeDao = employeeDao;
+	}
+
+	@Override
+	public List<Employee> getAll() {
+		return employeeDao.findAll();
+	}
+
+	@Override
+	public Employee updateEmployee(int id, double salary) {
+		Employee empToUpdate = getById(id);
+		empToUpdate.setSalary(salary);
+		employeeDao.save(empToUpdate);// REMEBER : FOR UPDATE AND ADD SAME METHOD : save()
+		return empToUpdate;
+	}
+
+	@Override
+	public Employee getById(int id) {
+		Employee emp = employeeDao.findById(id)
+				.orElseThrow(() -> new EmployeeNotFoundException("emp with id " + id + " is not found"));
+		return emp;
+	}
+
+	@Override
+	public Employee deleteEmployee(int id) {
+		Employee empToDelete = getById(id);
+		employeeDao.delete(empToDelete);
+		return empToDelete;
+	}
+
+	@Override
+	public List<Employee> getByName(String name) {
+		return employeeDao.findByName(name);
+	}
+
+	@Override
+	public Employee addEmployee(Employee employee) {
+		employeeDao.save(employee);
+		return employee;
+
+	}
+
+}
+
+3. write user define ex too
+------------------------------
+
+public class EmployeeNotFoundException extends RuntimeException{
+	private static final long serialVersionUID = 1L;
+
+	public EmployeeNotFoundException(String message) {
+		super(message);
+	}
+}
+
+4. udate the controller to support rest endpoints
+---------------------------------------------------
+@RequestMapping(path = "api")
+
+@RestController// @Controller+@ResponseBody
+public class EmployeeApi {
+
+	public EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+	//parser: java<--> json jakson
+	@GetMapping(path = "employees")
+	public List<Employee> getAll(){
+		return  employeeService.getAll();
+	}
+	//http://localhost:8090/empapp/api/employees/7
+	@GetMapping(path = "employees/{id}")
+	public Employee getAnEmployee(@PathVariable(name = "id")  int id){
+		return  employeeService.getById(id);
+	}
+	//from postman i will pass json of employee object --> java objet
+	//how to tell spring rest to do so @RequestBody
+	//post 
+	@PostMapping(path = "employees")
+	public Employee addEmployee(@RequestBody  Employee employee) {
+		return employeeService.addEmployee(employee);
+	}
+	//put mapping
+	@PutMapping(path = "employees/{id}")
+	public Employee updateEmployee(@PathVariable(name = "id") int id,  @RequestBody  Employee employee) {
+		return employeeService.addEmployee(employee);
+	}
+	@DeleteMapping(path = "employees/{id}")
+	public Employee deleteAnEmployee(@PathVariable(name = "id")  int id){
+		return  employeeService.deleteEmployee(id);
+	}
+	
+}
+
+
+Step 5: test the crud end point using postman
+--------------------------------------------------
+
+
+We have create rest end point using spring REST ( which dont follow any jsr)
+
+
+kronos they use jersey framework used to create REST api (based on jsr)
+
+
+JAX RS : java api for xml rest web service
+--------------------------------------------
+	jersey is a impl of JAX RS
+
+
+
+---------------------27/7/22---------------
+
+1. how to handle excetion in rest application
+-----------------------------------------------
+
+1. create a exception wrapper
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ErrorInfo {
+ private LocalDateTime	timestamp;
+  private String  statusCode;
+  private String    error;
+  private String toContact;
+  
+}
+
+2. we need to write ex handler (interanlly it use AOP* concept)
+
+
+@RestControllerAdvice	//AOP*
+public class EmpAppExceptionHandler {
+
+	//--------------emplyee not found ex-------------
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	public ErrorInfo handle404(EmployeeNotFoundException ex) {
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setError(ex.getMessage());
+		errorInfo.setStatusCode(HttpStatus.NOT_FOUND.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setToContact("ukg@team.com");
+		return errorInfo;
+	}
+    
+  //--------------emplyee not found ex-------------
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(Exception.class)
+	public ErrorInfo handle500(Exception ex) {
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setError("pls try after time");
+		errorInfo.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setToContact("ukg@team.com");
+		return errorInfo;
+	}
+}
+
+
+
+1. how to handle server side validatoin in rest 
+-----------------------------------------------
+
+jsr 303: hibeante validator
+
+step 1:
+put the dep of hibreante valdator in classpath
+
+implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+step 2:
+
+apply jsr validation on pojo
+-----------------------------
+@Entity
+@Table(name = "emp")
+public class Employee {
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@NotEmpty(message = "{employee.name.notEmpty}")
+	private String name;
+	
+	private double salary;
+
+
+setp 3: apply @valid in the post/put method 
+-------------------------------------------
+//hey spring boot before putting that json data to the employee object pls ensure validation must be respected
+	//if not it should give status code 400 and throw ex :MethodArgumentNotValidException
+	@PostMapping(path = "employees")
+	public ResponseEntity<Employee> addAnEmployee(@Valid @RequestBody Employee employee){
+		Employee emp= employeeService.addEmployee(employee);
+		return ResponseEntity.status(HttpStatus.CREATED).body(emp);
+	}
+
+
+
+step 4: write a handler for it
+--------------------------------------
+ @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+  	@ExceptionHandler(MethodArgumentNotValidException.class)
+  	public ErrorInfo handle400(MethodArgumentNotValidException ex) {
+    	
+    	//i want to get the error message so that i can send it to client
+    	//BindingResult
+    	String errorMessage=ex.getBindingResult().getAllErrors()
+    			.stream()
+    			.map(e-> e.getDefaultMessage())
+    			.collect(Collectors.joining(" "));
+    			
+  		ErrorInfo errorInfo=new ErrorInfo();
+  		errorInfo.setError(errorMessage);
+  		errorInfo.setStatusCode(HttpStatus.BAD_REQUEST.toString());
+  		errorInfo.setTimestamp(LocalDateTime.now());
+  		errorInfo.setToContact("ukg@team.com");
+  		return errorInfo;
+  	}
+
+
+
+Step 5: loose coupling for error messages:
+---------------------------------------------
+https://www.baeldung.com/spring-custom-validation-message-source
+
+
+messages.properties
+employee.name.notEmpty=name cant be left blank?
+
+
+@Configuration
+public class ValidationConfig {
+	@Bean
+	public MessageSource messageSource() {
+	    ReloadableResourceBundleMessageSource messageSource
+	      = new ReloadableResourceBundleMessageSource();
+	    
+	    messageSource.setBasename("classpath:messages");
+	    messageSource.setDefaultEncoding("UTF-8");
+	    return messageSource;
+	}
+}
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

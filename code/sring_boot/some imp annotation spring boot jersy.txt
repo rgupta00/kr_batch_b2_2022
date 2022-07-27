@@ -1,0 +1,288 @@
+What we did today:
+
+* review previous day work .. how spring boot work
+* gradle wrapper
+
+
+
+
+
+Spring rest:
+-------------
+xml :xxxxxxxxxx
+annoatation: 
+java config
+					@Autowire				@Repository
+								<--------------- EmployeeDaoImpJbdc
+	employeeApi	<-------------- EmployeeService
+
+								<--------------- EmployeeDaoImpHIb
+										@Repository
+										@Primary
+imp core annotation for spring:
+------------------------------
+			@Component
+			  |
+  -----------------------------------------------------------------------------------------
+  |				|							|
+ @Service 			@Controller 						@Repository
+				|
+				@RestController 
+
+
+
+how to di:
+------------
+@Autowire
+
+
+how to avoid confusion:
+---------------------
+@Primary
+
+
+Another way to create the bean:
+-----------------------------
+@Bean
+
+
+
+how spring boot bootrap:
+------------------------------
+@SpringBootApplication=@SpringBootConfiguration+ @EnableAutoConfiguration+ @ComponentScan
+
+
+
+
+some most imp spring boot rest annotation
+_---------------------------------------------
+
+@RequestMapping(path = "api")
+
+@RestController// @Controller+@ResponseBody
+public class EmployeeApi {
+
+	public EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+	}
+	//parser: java<--> json jakson
+	@GetMapping(path = "employees")
+	public List<Employee> getAll(){
+		
+	}
+	//http://localhost:8090/empapp/api/employees/7
+	@GetMapping(path = "employees/{id}")
+	public Employee getAnEmployee(@PathVariable(name = "id")  int id){
+	}
+	//from postman i will pass json of employee object --> java objet
+	//how to tell spring rest to do so @RequestBody
+	//post 
+	@PostMapping(path = "employees")
+	public Employee addEmployee(@RequestBody  Employee employee) {
+	}
+	//put mapping
+	@PutMapping(path = "employees/{id}")
+	public Employee updateEmployee(@PathVariable(name = "id") int id,  @RequestBody  Employee employee) {
+	}
+	@DeleteMapping(path = "employees/{id}")
+	public Employee deleteAnEmployee(@PathVariable(name = "id")  int id){
+
+	}
+}
+
+
+
+how to return more meaningful status code
+
+
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND): it should be appled to ex class and change the status code
+
+Now we need to write ex handler to send a better json data to the client
+-------------------------------------------------------------------------
+
+
+404
+ logic: i will create dto to hold this data: ErrorInfo
+ how i will force spring boot to send this data rather then sending what it is sending by default
+
+ u need to write a class with @RestControllerAdvice annotation
+
+
+class ErrorInfo{
+    timestamp
+    status
+    toContact
+}
+
+
+{
+    "timestamp": "2022-07-27T04:37:07.400+00:00",
+    "status": 404,
+    "toContact": "ukg@taskforce.com"
+    
+}
+
+
+
+
+@RestControllerAdvice
+public class EmpAppExceptionHandler {
+
+	//now u need to declare ex handler 
+	@ResponseStatus(code =HttpStatus.NOT_FOUND )
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	public ErrorInfo handle404(EmployeeNotFoundException e) {
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setStatus(HttpStatus.NOT_FOUND.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setToContact("ukg@taskforce.com");
+		errorInfo.setDetails(e.getMessage());
+		return errorInfo;
+	}
+	
+	@ResponseStatus(code =HttpStatus.INTERNAL_SERVER_ERROR )
+	@ExceptionHandler(Exception.class)
+	public ErrorInfo handle500(Exception e) {
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setToContact("ukg@taskforce.com");
+		errorInfo.setDetails("pls try after some time");
+		return errorInfo;
+	}
+}
+
+
+
+how to return proper status code while post / delete
+
+for post:
+------------
+
+@PostMapping(path = "employees")
+	public ResponseEntity<Employee> addEmployee(@RequestBody  Employee employee) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.addEmployee(employee));
+	}
+	
+
+
+for delete:
+------------
+	@DeleteMapping(path = "employees/{id}")
+	public ResponseEntity<Void> deleteAnEmployee(@PathVariable(name = "id")  int id){
+		  employeeService.deleteEmployee(id);
+		  return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+
+
+how to configure jersy annotations:
+===================================
+
+
+
+@Path("api")
+public class EmployeeApi {
+
+	private EmployeeService employeeService;
+
+	@Autowired
+	public EmployeeApi(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+
+	// get all the employees
+	@GET
+	@Produces("application/json")
+	@Path("employees")
+	public List<Employee> getAll() {
+		return employeeService.getAll();
+	}
+
+	// get all the employees
+	//	Jaxrs
+	/* @PathParam  and @QueryParam
+	 * 
+	 * Spring 
+	 * @PathVariable		@RequestParam
+	 *
+	 */
+	@GET
+	@Produces("application/json")
+	@Path("employees/{id}")
+	public Employee getAnEmployee(@PathParam("id")int id) {
+		return employeeService.getById(id);
+	}
+
+	
+	@POST
+	@Produces("application/json") 
+	@Consumes("application/json")
+	@Path("employees")
+	public Employee addAnEmployee(Employee employee) {
+		return employeeService.addEmployee(employee);
+	}
+	
+	@DELETE
+	@Path("employees/{id}")
+	public void deleteAnEmployee(@PathParam("id")int id) {
+		 employeeService.getById(id);
+	}
+	
+	@PUT
+	@Produces("application/json") 
+	@Consumes("application/json")
+	@Path("employees/{id}")
+	public Employee updateAnEmployee(@PathParam("id")int id , Employee employee) {
+		 return  employeeService.updateEmployee(id, employee.getSalary());
+	}
+}
+
+how to handle exception in jersy :
+-------------------------------
+@Provider
+public class EmpNotFoundExHandler implements ExceptionMapper<EmployeeNotFoundException>{
+
+	@Override
+	public Response toResponse(EmployeeNotFoundException exception) {
+		System.out.println("------------------------------------------------------");
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setStatus(Status.NOT_FOUND.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setDetails(exception.getMessage());
+		errorInfo.setToContact("ukg@info.com");
+		
+		return Response.status(Status.NOT_FOUND).entity(errorInfo).build();
+	}
+
+}
+
+
+@Provider
+public class GenericExHandler implements ExceptionMapper<Exception>{
+
+	@Override
+	public Response toResponse(Exception exception) {
+		System.out.println("------------------------------------------------------");
+		ErrorInfo errorInfo=new ErrorInfo();
+		errorInfo.setStatus(Status.INTERNAL_SERVER_ERROR.toString());
+		errorInfo.setTimestamp(LocalDateTime.now());
+		errorInfo.setDetails("pls try after some time");
+		errorInfo.setToContact("ukg@info.com");
+		
+		return Response.status(Status.INTERNAL_SERVER_ERROR).entity(errorInfo).build();
+	}
+
+}
+
+
+
+
+
+
+
+
+
