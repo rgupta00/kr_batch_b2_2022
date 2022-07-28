@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>basics of functional programming</title>
+</head>
+
+<body>
+
+    <script>
+        //higher order funcation: you can pass a funcation into another function call
+        // or a fuction can return a an another fuction, funcation pgoramming, declartive data processing
+
+
+//filter , map, reduce, sort 
+//functional programming in es 6
+const companies = [
+	{name: "Company One", category: "Finance", start: 1981, end: 2003},
+	{name: "Company Two", category: "Retail", start: 1992, end: 2008},
+	{name: "Company Three", category: "Auto", start: 1999, end: 2007},
+	{name: "Company Four", category: "Retail", start: 1989, end: 2010},
+	{name: "Company Five", category: "Technology", start: 2009, end: 2014},
+	{name: "Company Six", category: "Finance", start: 1987, end: 2010},
+	{name: "Company Seven", category: "Auto", start: 1986, end: 1996},
+	{name: "Company Eight", category: "Technology", start: 2011, end: 2016},
+	{name: "Company Nine", category: "Retail", start: 1981, end: 1989}
+  ];
+  
+  const ages = [33, 12, 20, 16, 5, 54, 21, 44, 61, 13, 15, 45, 25, 64, 32];
+
+  //we wnat to print all ages
+//   ages.forEach(age=>console.log(age))
+
+// ages.filter(age=> age>=30).forEach(age=>console.log(age))
+
+// companies.forEach(c=> console.log(c))
+
+//companies.filter(c=> c.category=='Technology').forEach(c=> console.log(c))
+
+//all companies that started in 1980-1990
+
+// companies.filter(c=> c.start>=1980 && c.start<=1990).forEach(c=> console.log(c))
+
+//mapping now let say we want to print only name
+
+// companies.filter(c=> c.start>=1980 && c.start<=1990).map(c=> c.name).forEach(c=> console.log(c))
+
+
+//mapping now let say we want to and no of year it have opeated
+//companies.filter(c=> c.start>=1980 && c.start<=1990).map(c=>c.name+" : " +(c.end-c.start)).forEach(c=> console.log(c))
+
+//sorting 
+
+//ages.sort((a,b)=> a-b).forEach(age=>console.log(age))
+// companies.filter(c=> c.start>=1980 && c.start<=1990).map(c=>c.name+" : " +(c.end-c.start)).forEach(c=> console.log(c))
+
+// companies.sort(function(c1,c2){
+//     return (c1.start> c2.start)?1:-1
+// }).filter(c=> c.start>=1980 && c.start<=1990).map(c=>c.name+" : " +(c.start)).forEach(c=> console.log(c))
+
+
+//companies.sort((c1,c2)=>(c1.start> c2.start)?1:-1).filter(c=> c.start>=1980 && c.start<=1990).map(c=>c.name+" : " +(c.start)).forEach(c=> console.log(c))
+
+        //basic ex: syn vs ayn
+
+        //   let foo=  function (){
+        //         console.log('hello to js')
+        //     }
+        //     function bar(callback){
+        //         callback();
+        //     }
+
+        //     bar(foo);
+
+
+        // function bar(callback){
+        //     callback();
+        // }
+
+        // bar(function (){
+        //     console.log('hello to js')
+        // });
+
+        // let add=(a,b)=> a+b;
+
+        // let mul=(a,b)=> a*b;
+
+        // let div=(a,b)=> a/b;
+
+        // function apply(fun, a, b){
+        //     return fun(a, b);
+        // }
+
+        // let val= apply(mul, 4,4);
+        // console.log(val)
+
+        //ayn communication in js=== AJAX
+
+        // console.log('hello to js')
+
+        // setTimeout(function(){
+        //     console.log('i am doing something to js')
+        // }, 100);
+
+        // console.log('bye to js')
+
+        // console.log('hello to js')
+
+        // setTimeout( ()=>  console.log('i am doing something to js'), 100);
+
+        // console.log('bye to js')
+
+
+    </script>
+</body>
+
+</html>

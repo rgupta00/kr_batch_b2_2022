@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>es 6</title>
+</head>
+
+<body>
+    <script>
+        /*
+        4. Default value to function arguments
+        5. Rest operation in ES 6 ( aka variable arguemnt methods of java)
+        6 . Spread operator in es 6
+        7.Spread operator with object literals
+8. Destructuring arrary
+9. Destructuring objects
+10. String templetes
+11. for of loop: used with iterables
+12. Es6 classes
+    -3 type of functions in a class
+    - class inheritance
+    */
+
+    // function foo(a=7, b=71){
+    //     console.log(a + ": "+ b)
+    // }
+    // foo(undefined, 3);
+
+        //Rest operation in ES 6 ( aka variable arguemnt methods of java)
+
+        function printMe(name, ...colors){
+            console.log(name)
+            for(let c of colors){
+                console.log(c)
+            }
+        }
+
+        // let arr=['red','blue',"green"];
+        // printMe('raj',...arr)
+
+        //spread op
+        // let ob={"name":"raj","add":"delhi"}
+        // name=ob.name;
+
+        // console.log(name);
+        // console.log(name);
+
+        // let employee = ["rajeev", undefined,"Male"];
+
+        // let [fname, lname, gender] = employee;
+        // console.log(fname)
+        // console.log(lname)
+        // console.log(gender)
+
+        //const in c++ ES6
+        // const a=77;
+        // a=55;
+        // console.log(a)
+
+    //     const ob={"name":"raj","add":"delhi"}
+    //    ob.name="foo"
+    //    console.log(ob)
+
+    //what is string litreal
+
+    // const ob={"name":"raj","add":"delhi"}
+
+    // console.log(`the person details are ${ob.name}
+    
+    // and add is ${ob.add}`)
+
+
+    // let name='raj';
+    // let add='delhi';
+
+    // let person={
+    //     name,
+    //     add
+    // }
+
+    // console.log(`the value is ${person.name} and ${person.add}`)
+
+    const ob={name:"raj",add:"delhi"}
+
+    const{name, add}=ob;
+    
+
+    </script>
+</body>
+
+</html>

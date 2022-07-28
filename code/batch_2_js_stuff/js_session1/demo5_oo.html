@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>classical oo</title>
+</head>
+<body>
+    <script>
+
+        //construction function
+        function Person(name, add, age){
+           // let this={};
+            this.name=name;
+            this.add=add;
+            this.age=age;
+           // return this;
+       }
+
+       Person.prototype.printDetails=function(){
+            console.log(`the person details are ${this.name} , ${this.add} and age is ${this.age}`)
+           }
+
+       let ob=new  Person('raj','delh','43');
+       console.log(ob)
+
+       let ob2=new  Person('raj','delh','43');
+       console.log(ob2)
+
+       console.log(ob)
+
+
+
+
+
+
+    //    function createPerson(name, add, age){
+    //         let ob={};
+    //         ob.name=name;
+    //         ob.add=add;
+    //         ob.age=age;
+    //         return ob;
+    //    }
+
+    //    let ob=createPerson('raj','delh','43');
+    //    console.log(ob)
+
+
+    </script>
+</body>
+</html>

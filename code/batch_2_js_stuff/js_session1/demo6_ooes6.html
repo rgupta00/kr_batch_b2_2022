@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>oo in ES6</title>
+</head>
+
+<body>
+    <script>
+
+        // class Animal {
+        //     constructor(animalTypp) {
+        //         this._animalTypp = animalTypp;
+        //     }
+
+        //     get animalType(){
+        //         return this._animalTypp;
+        //     }
+
+        //     printDetails() {
+        //         console.log(`animal type is ${this._animalTypp}`)
+        //     }
+        // }
+
+        // let ob = new Animal('cat');
+
+        // ob.printDetails();
+        // console.log(ob.animalType)
+
+
+        class Animal {
+            constructor(animalTypp) {
+                this._animalTypp = animalTypp;
+            }
+
+            get animalType(){
+                return this._animalTypp;
+            }
+
+            //static method 
+            static factoryAnimal(animalTypp){
+                return new Animal(animalTypp);
+            }
+
+
+            printDetails() {
+                console.log(`animal type is ${this._animalTypp}`)
+            }
+        }
+
+        class Eagle extends Animal{
+            constructor(animalTypp, origin) {
+                super(animalTypp)
+                this._origin=origin;
+            }
+
+
+            printDetails() {
+                super.printDetails();
+                console.log(`animal origin is ${this._origin}`)
+            }
+
+        }
+
+        let e=new Eagle('bird','india');
+        Animal.factoryAnimal('bird')
+        e.printDetails();
+
+        // let ob = new Animal('cat');
+
+        // ob.printDetails();
+        // console.log(ob.animalType)
+
+    </script>
+</body>
+
+</html>
