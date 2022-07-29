@@ -1,0 +1,341 @@
+Agenda session :18
+---------------------
+* callback , Promise api,asynch await, ajax examples
+* XMLHttpRequest, get post
+* nodejs, how it works, node modules
+* httpserver with nodejs, file processing, postgress..
+* express js (Spring REST) routes callback, middleware
+* mongodb basics
+* MEAN stack curd basics
+
+
+
+
+revision of oo in es6
+____________________
+
+    class Animal {
+            constructor(type) {
+                this.type = type;
+            }
+            print() {
+                console.log(`the type of animal is ${this.type}`)
+            }
+
+            static createAnimal(type){
+                return new Animal(type);
+            }
+        }
+
+        class Bird extends Animal{
+            constructor(type, location){
+                super(type)
+                this.location=location
+            }
+
+            print() {
+                super.print()
+                console.log(`the location of animal is ${this.location}`)
+            }
+
+        }
+        let a = new Bird('cat',"delhi");
+        a.createAnimal('abc')
+        a.print();
+
+
+
+
+
+basics of typescript:
+-------------------------
+	typescript help to have less problem in a big project
+	typescript= type(strong typing support) + js 
+
+
+step 1 : npm install -g typescript
+
+
+step 2: create a ts file
+
+demo.ts
+---------
+function greeting(persoName: string): void{
+    console.log(persoName)
+}
+greeting('raj')
+
+a.ts -------------->a.js
+	tsc
+
+Step 3:
+-------
+tsc demo.ts it will create demo.js file (transpile to this)
+------------------------
+function greeting(persoName) {
+    console.log(persoName);
+}
+greeting('raj');
+
+
+step 4: 
+--------
+node demo.js
+
+
+
+Ex2:
+
+typescript interface: very similer to js interface:
+------------------------------------------
+
+interface Friend{
+    name: string, add: string, salary?: number
+}
+
+
+function printFriendsDetails(friends: Friend[]){
+    for(let friend of friends){
+        console.log(`name is ${friend.name} and add is ${friend.add} and salary is ${friend.salary}`)
+    }
+}
+
+
+
+let friendsArr=[
+    {"name":"raj","add":"del","salary":8966},
+    {"name":"abc","add":"del"}
+];
+
+printFriendsDetails(friendsArr)
+
+how to declare datatypes
+
+let isDone:boolean;
+
+isDone=true
+
+
+enum Gender{F,M}
+
+let data: Array<number>=[3,6,6];
+
+for(let d of data){
+    console.log(d)
+}
+
+
+	Interface, Clas		json
+angular <----------------> spring boot
+
+
+
+//classes and inheriance with ts
+-------------------------------------
+class Emp{
+    constructor(private name: string, private salary: number){
+    }
+
+    public print(): void{
+        console.log(`the details are ${this.name} and ${this.salary}`)
+    }
+}
+
+class Programmer extends Emp{
+	//dont apply private to the argument passed to base class
+
+    constructor( name: string,  salary: number, private language: string){
+        super(name,salary)
+        this.language=language;
+    }
+
+
+    public print(): void{
+        super.print();
+        console.log(` ${this.language}`)
+    }
+}
+
+let p=new Programmer('raja',56777,'java')
+p.print();
+
+
+
+Note : how to transpile to some specific es version
+ demo.ts tsc --target es6
+
+
+
+
+callback , Promise api,asynch await, ajax examples
+-----------------------------------------------
+ u can pass an funcation into a another function or u can retun a fun from a function this is called higher order function
+
+ funtional programming 
+
+ callback: can be syn or asyn
+
+A JavaScript callback is a function which is to be executed after another function has finished execution. A more formal definition would be - Any function that is passed as an argument to another function so that it can be executed in that other function is called as a callback function
+
+
+
+
+
+
+some basics of higher order funcation:
+------------------------------------
+higher order function , syn and aync code
+console.log('start')
+
+//const foo= ()=>console.log('this is a foo function')
+
+
+const bar= (callback)=>{
+    console.log('inside bar function')
+    callback();
+    console.log('done bar function')
+}
+
+bar(()=>console.log('this is a foo function'))
+
+console.log('end')
+
+behavioural dp ..
+const add = (a, b) => a + b;
+const divide = (a, b) => a / b;
+const mul = (a, b) => a * b;
+
+const operate = (a, b, callback) => {
+    if (callback === 'function')
+        return callback(a, b);
+    else
+        throw "some error";
+}
+
+console.log(operate(3, 5, 'mul'))
+
+
+
+
+
+
+
+promises:
+------------
+let cleantherooms=function(){
+    return new Promise(function(resolve,reject){
+        resolve('clean the rooms')
+    })
+}
+
+let removethegarbage=function(){
+    return new Promise(function(resolve,reject){
+        reject('removethegarbage')
+    })
+}
+
+let gettheicecream=function(){
+    return new Promise(function(resolve,reject){
+        resolve('u dont need it')
+    })
+}
+
+console.log('start')
+
+const result= async () => {
+    console.log('1')
+    const r1= await cleantherooms();
+    console.log('2')
+    const r2= await removethegarbage();
+    console.log('3')
+    const r3= await gettheicecream();
+}
+
+result()
+.then(result=>console.log(result))
+.catch(err=> console.log('this is not done'))
+
+console.log('end')
+
+
+
+
+
+let we want to write some sort of cal:
+-----------------------------------------
+
+
+ 1,2--->3
+	3, 20--> 23,30
+			--> ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if u get time : for NoSQL
+	https://www.youtube.com/watch?v=qI_g07C_Q5I&t=1s
+
+if u want to learn something more in easy language
+https://www.youtube.com/c/Techsithtube/playlists
+
+
+
+
+
+
+
+
+
+
+
+node.exe .\<filename>.ts
+https://stackoverflow.com/questions/56199111/visual-studio-code-cmd-error-cannot-be-loaded-because-running-scripts-is-disabl/67420296#67420296
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
