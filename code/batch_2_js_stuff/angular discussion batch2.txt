@@ -1,0 +1,104 @@
+
+Angular discussion:
+------------------
+what is angular: farmework for creating SPA
+
+Angular CLI: help us to get started very fast
+it help to provide angular boilerplate it do so many help uder the hood:
+
+set the tsc compiler
+set webpack
+basic devserver
+help to convert ts to js by using bable
+help to give to readymade config for testing: karama protector *
+it help to provide us performace testing tools...
+
+:)
+
+how to configure it?
+---------------------
+
+npm install -g @angular/cli@8.3.19
+
+ng version
+
+how to create a new project
+
+ng new demo-proj
+
+ng server --open
+
+
+
+angular arch:
+	...
+	...
+
+angular flow:
+	...
+	....
+
+how to create own components
+-------------------------------
+ng g c hello
+
+it will create 5 files u can delete test file for now
+
+template vs templateUrl
+
+
+
+modify hello world component:
+----------------------------
+
+What is the diff bw interpolation {{}} and properity binding []
+
+how to call a method from template ?
+
+
+import { fn } from '@angular/compiler/src/output/output_ast';
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-hello',
+  template: `
+  <p [innerHTML]="fname"></p>
+  <br/>
+    {{fname}} <br/>
+    <br/>
+    {{product | json}}<br/>
+    {{product.id}}<br/>
+    {{product.pnam}}<br/>
+     {{fullName()}}<br/>
+
+    <div hidden={{isHidden}}>this is hidden</div>
+    <div [hidden]="isHidden">this is hidden 2</div>
+  `,
+  styleUrls: ['./hello.component.css']
+})
+export class HelloComponent implements OnInit {
+
+  //interpolation : used to send the data from comp-> template
+   fname: string='jfdlkfjdlkfjd'
+   lname: string='gupta'
+
+   isHidden: boolean=false;
+
+   fullName():string{
+    return this.fname+ this.lname;
+   }
+
+   product: any={"id":33,"pname":"laptop","price":67555}
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+
+
+
+
+
