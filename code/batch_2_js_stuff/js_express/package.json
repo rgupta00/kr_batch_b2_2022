@@ -1,0 +1,17 @@
+{
+  "name": "js_express",
+  "version": "1.4.7",
+  "description": "hello world",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "raj",
+  "license": "ISC"
+}
