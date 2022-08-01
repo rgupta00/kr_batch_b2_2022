@@ -1,0 +1,369 @@
+
+MEAN: MERN stack:
+------------------
+
+A	Express					Mongodb
+	-------------node js ------------
+
+
+NoSQL:
+-------
+	what is NoSQL?
+	not only SQL
+
+	Polyglot of db: microservice 
+
+		produdct		 discount
+
+		customer		shopping
+
+		.....			......
+	
+	diff type of NoSQL
+	
+	doc type db: MOngodb BSON
+
+	{
+	 "postId":"6565665"
+	  	comments{
+
+	
+		}
+	}
+
+	graph db: Neo4j
+
+	cassandera:  columner database 
+
+Mongodb: basics :
+----------------
+
+
+show dbs
+use batchb2;
+show collections
+
+how to insert:
+--------------
+
+db.emps.insert({ename:"raj",age:40, salary:3000});
+db.emps.insert({ename:"ekta",age:35, salary:3300});
+db.emps.insert({ename:"kapil",age:50, salary:4000});
+db.emps.insert({ename:"seema",age:50, salary:4000, nationality:"us"});
+
+
+how to display:
+--------------
+db.emps.find();
+
+
+
+how to display:
+--------------
+db.emps.find();
+
+db.emps.find().pretty();
+
+
+udpate:
+-----------
+db.emps.update({ename:"raj"},{$set:{salary:3400}})
+
+
+delete:
+db.emps.remove({ename:"raj"})
+
+https://www.guru99.com/mongodb-tutorials.html
+
+
+
+step 1:
+sudo npm install express
+sudo npm install nodemon
+
+
+introduction to mongodb:
+-------------------------
+
+Table -----------> collection
+column-----------> key
+value ------------value
+records/tuples -------- document/ object
+
+
+
+
+what is Express?
+-----------------
+how to use it
+
+
+
+
+
+
+
+
+MEAN demo example:
+____________________
+Angular<--------> Express <------> mongodb
+		Nodejs		   mongoose	
+
+
+
+
+
+We want to create a backend application with 
+mongooes express over nodejs
+-------------------------------
+
+why mongooes?
+https://stackoverflow.com/questions/18531696/why-should-we-use-mongoose-odm-instead-of-using-directly-mongodb-with-mongodb-dr
+
+
+https://stackoverflow.com/questions/57895175/server-discovery-and-monitoring-engine-is-deprecated
+
+
+What body parser do?
+allows express to read the body and then parse that into a Json object that we can understand.
+
+
+
+
+
+
+what is _v in node:
+--------------------
+https://stackoverflow.com/questions/12495891/what-is-the-v-field-in-mongoose
+
+
+whats-the-difference-between-findoneandupdate-and-findoneandreplace
+---------------------------------------------------------------------
+https://stackoverflow.com/questions/39153460/whats-the-difference-between-findoneandupdate-and-findoneandreplace
+
+
+
+versioning of sw:
+--------------
+         major version. miner version. big fix release
+	    x.y.z
+	jdk 1.8.111
+
+ 
+	"express": "^4.18.1",
+	update the minor or patch version without upgarding major version
+
+ie : 4.18.1		4.18.9 ok
+ie : 4.18.1		4.40.9 ok
+ie : 4.18.1		5.18.9 Not ok
+
+			4.0.0 <4.18.1 < 5.0.0
+	
+	"express": "~4.18.1",
+
+ie : 4.18.1		4.18.9 ok
+ie : 4.18.1		4.40.9 Not ok
+ie : 4.18.1		5.18.9 Not ok
+
+
+
+step 2: create an project
+	npm init 
+        npm install body-parser
+	npm install mongoose express
+
+	express
+
+	npm install express --save
+
+step 3: create book model using mongoose
+
+
+
+
+how to create routes with express:
+--------------------------
+
+let express= require('express')
+let app=express();
+
+app.get("/", function(req, res){
+   res.send('hello to all from express js') 
+})
+
+app.get("/home", function(req, res){
+    res.send('home') 
+ })
+
+ app.get("/admin", function(req, res){
+    res.send('admin') 
+ })
+
+ app.get("/user", function(req, res){
+    res.send('user') 
+ })
+
+ app.get("/user", function(req, res){
+    res.send('user another route') 
+ })
+
+ app.get("/abc*pqr", function(req, res){
+    res.send('abc*pqr') 
+ })
+
+
+app.listen(8090)
+console.log('sever is listing')
+
+
+servlet filter :(similer to servlet filter)
+----------------------------------------------
+
+	fiter ----- servlet
+u can configure hadler function ( js ) that will run before your routes
+sec, logging.... cross cutting concern
+
+https://expressjs.com/en/resources/middleware/cors.html
+
+
+How to create handlers?
+---------------------------
+
+let checkUrl=function(req, res, next){
+    console.log('currunt url req was: '+req.originalUrl);
+    next();
+}
+
+let checkUrl2=function(req, res, next){
+    console.log('currunt url req was 2: '+req.originalUrl);
+    next();
+}
+
+ app.get("/admin",[ checkUrl, checkUrl2], function(req, res){
+    res.send('admin') 
+ })
+
+app.listen(8090)
+console.log('sever is listing')
+
+
+how to use reqparam and parthvaraible?
+------------------------------------
+
+
+//http://localhost:8090/customer2?eid=4&pid=5655
+app.get("/customer2", function(req, res){
+    // res.send(req.params.cid) 
+    res.send(req.query) 
+ })
+
+
+//http://localhost:8090/customer/4/product/5655
+
+app.get("/customer/:cid/product/:pid", function(req, res){
+    // res.send(req.params.cid) 
+    res.send(req.params) 
+ })
+
+app.listen(8090)
+console.log('sever is listing')
+
+
+
+
+
+How to create simplest ME(A)N stack app:
+----------------------------------
+
+crud application: book application
+________________________________
+
+step1: databasse 
+
+use batchbt2;
+	
+steps 1: create databse and collections
+--------------------------------
+
+db.books.insert({
+    title: 'java head first',
+    author: 'katthy',
+    category: 'java'
+})
+
+db.books.insert({
+    title: 'spring in action',
+    author: 'foo',
+    category: 'spring'
+})
+
+db.books.insert({
+    title: 'MEAN in action',
+    author: 'bar',
+    category: 'bar'
+})
+
+db.books.find();
+
+
+
+step 2: create an project
+------------------------
+	npm init 
+        npm install body-parser
+	npm install mongoose express
+
+	
+
+step 3: create book model using mongoose
+------------------------------------
+
+Book.model.js
+________________
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var BookSchema = new Schema({
+  title: String,
+  author: String,
+  category: String
+});
+
+module.exports = mongoose.model('Book', BookSchema);
+
+
+
+
+step 4: app.js==> CRUD operation
+____________________________
+
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var Book = require('./Book.model');
+
+var port = 8080;
+var db = 'mongodb://localhost/batchbt2'
+
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true});
+
+app.use(bodyParser.json())
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.get('/', function(req, res) {
+  res.send('happy to be here');
+});
+
+
+
+app.listen(port, function() {
+  console.log('app listening on port ' + port);
+});
+
+
+
