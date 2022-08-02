@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Annual Salary</th>
+            <th>Date of Birth</th>
+        </tr>
+    </thead>
+   
+    <tbody>
+        <tr *ngFor='let e of employees'>
+            <td>{{e.code}}</td>
+            <td>{{e.name | employeeTitle:e.gender}}</td>
+            <td>{{e.gender}}</td>
+            <td>{{e.annualSalary}}</td>
+            <td>{{e.dateOfBirth}}</td>
+        </tr>
+        <tr *ngIf="!employees || employees.length==0">
+            <td>no emplist is empty</td>
+        </tr>
+    </tbody>
+</table>
