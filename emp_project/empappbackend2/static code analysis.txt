@@ -1,0 +1,62 @@
+Code coverage Jacoco :
+---------------------
+what is code coverage?
+
+code coverage tool Jacoco:
+
+what code coverage?
+
+funcational coverage
+statement coverage
+Path coverage
+Branch or descision coverage
+condition coverage
+
+
+Step :
+1. import spring boot testing application done earlier
+
+2. apply Jacoco plugin
+
+id 'jacoco'
+
+plugins {
+	.........
+	id 'jacoco'
+}
+
+
+3. add finalizedBy
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+4. configure Jacoco itself:
+
+jacoco{
+	toolVersion = "0.8.5"
+//	reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+
+5. customization reports
+
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+	reports {
+		xml.enabled true
+		csv.enabled false
+		html.destination file("${buildDir}/jacocoHtml")
+	}
+}
+
+
+
+id "org.sonarqube" version "3.0"
+
+
+
+sonarqube-6.7.7.zip
+https://docs.sonarqube.org/6.7/EnterpriseEdition.html

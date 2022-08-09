@@ -1,0 +1,318 @@
+Session 25:
+agenda:
+spring boot 3 layer testing
+optional : using static code quality tools
+
+Step1: it is wise to use some in memory db like H2
+
+configre with sprng boot:
+-----------------------
+
+spring.h2.console.enabled=true
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=password
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+# Custom H2 Console URL
+spring.h2.console.path=/h2
+
+spring.jpa.hibernate.ddl-auto=update
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
+
+spring.jpa.show-sql=true
+
+
+Step 2:
+---------
+	web------------- service	--------------- dao layer	------ DB
+       @WebMvcTest	MockitoExtension		@DataJpaTest
+
+	<---------------------------------------------------->
+			@SpringBootTest
+
+
+
+	@Test
+	void given_when_then() {
+		
+	}
+
+what u do? you write test for dao layer:
+-----------------------------------
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.assertj.core.util.Arrays;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+@DataJpaTest
+class EmployeeDaoTest {
+
+	@Autowired
+	private EmployeeDao employeeDao;
+
+	// -------add emp ------------
+	
+	@DisplayName("Dao layer test for insert operation")
+	@Test
+	void givenEmployeeObject_whenSave_thenReturnSavedObject() {
+		Employee employee = new Employee("raj", 6000);
+
+		Employee savedEmployee = employeeDao.save(employee);
+
+		assertThat(savedEmployee).isNotNull();
+		assertThat(savedEmployee.getId()).isGreaterThan(0);
+
+	}
+
+	// -------add emp ------------
+	@DisplayName("Dao layer test for getAll operation")
+	@Test
+	void givenEmployeeList_whenFindAll_thenReturnEmployeeList() {
+		Employee employee = new Employee("raj", 6000);
+		Employee employee2 = new Employee("ekta", 6000);
+		
+		employeeDao.save(employee);
+		employeeDao.save(employee2);
+		
+		List<Employee> employees=employeeDao.findAll();
+//		
+//		List<Employee> employees=new ArrayList<Employee>();
+//		employees.add(employee2);
+//		employees.add(employee);
+//		
+
+		assertThat(employees).isNotNull();
+		assertThat(employees.size()).isEqualTo(2);
+
+	}
+
+	@DisplayName("Dao layer test for delete operation")
+	@Test
+	void givenEmployeeObject_whenDeleated_thenRemovedFromDb() {
+		Employee employee = new Employee("raj", 6000);
+
+		Employee savedEmployee = employeeDao.save(employee);
+
+		employeeDao.deleteById(savedEmployee.getId());
+		//now i want to hit db to find that emp should not be thre
+		Optional<Employee> optEmp= employeeDao.findById(savedEmployee.getId());
+		
+		assertThat(optEmp).isEmpty();
+		
+	}
+}
+
+
+testing service layer:
+------------------------
+
+
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.empapp.dao.Employee;
+import com.empapp.dao.EmployeeDao;
+@ExtendWith(MockitoExtension.class)
+class EmployeeServiceImplTest {
+
+	@Mock	//a fake ob without any behaviour
+	private EmployeeDao employeeDao;
+	
+	@InjectMocks
+	private EmployeeServiceImpl employeeService;
+	
+	private Employee employee;
+	@BeforeEach
+	void setUp() throws Exception {
+		employee=new Employee(1, "raj", 7000);
+	}
+
+	@DisplayName("service layer test for insert operation")
+	@Test
+	void givenEmployeeObject_whenSaved_thenGetSavedObject() {
+		when(employeeDao.save(employee)).thenReturn(employee);
+		
+		Employee savedEmp= employeeService.addEmployee(employee);
+		
+		assertThat(savedEmp).isNotNull();
+		
+	}
+
+	@DisplayName("service layer test for insert operation")
+	@Test
+	void givenEmployeeList_whenGetAllEmployee_thenGetEmployeeList() {
+		
+		Employee employee = new Employee("raj", 6000);
+		Employee employee2 = new Employee("ekta", 6000);
+		List<Employee> employees=new ArrayList<Employee>();
+		employees.add(employee2);
+		employees.add(employee);
+		
+		when(employeeDao.findAll()).thenReturn(employees);
+		
+		
+		
+		List<Employee> employees2=employeeService.getAll();
+		
+	
+		
+		assertThat(employees2).isNotNull();
+		assertThat(employees2.size()).isEqualTo(2);
+		
+		
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+		employee=null;
+	}
+
+
+}
+
+
+
+testing rest layer:
+------------------------
+
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import com.empapp.dao.Employee;
+import com.empapp.dao.EmployeeDao;
+import com.empapp.service.EmployeeService;
+@WebMvcTest(controllers = EmployeeApi.class)
+class EmployeeApiTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+	
+	//service layer
+	@MockBean //add mock to spring app context 
+	private EmployeeService employeeService;
+	
+	@MockBean //add mock to spring app context 
+	private EmployeeDao employeeDao;
+	
+	
+	@Test
+	void givenListOfEmployees_whenGetAllEmployee_thenRetunListOfEmployee() throws Exception {
+		Employee employee = new Employee("raj", 6000);
+		Employee employee2 = new Employee("ekta", 6000);
+		List<Employee> employees=new ArrayList<Employee>();
+		employees.add(employee2);
+		employees.add(employee);
+		
+		when(employeeService.getAll()).thenReturn(employees);
+		
+		ResultActions resultAction = mockMvc.perform(get("/api/employees"));
+		
+//		resultAction.andExpect(status().isOk()).andDo(print());
+		
+		resultAction.andExpect(status().isOk())
+		.andDo(print())
+		.andExpect(jsonPath("$.size()", is(employees.size())));
+		
+	}
+
+
+
+}
+
+integration test:
+--------------
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+class EmployeeAppIntegrationTest {
+
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@Autowired
+	private EmployeeService employeeService;
+	
+	@Autowired
+	private EmployeeDao employeeDao;
+	
+	@Autowired
+	private ObjectMapper objectMapper;// it is used to convert java object to json
+	
+	
+	@BeforeEach
+	void setUp() throws Exception {
+		employeeDao.deleteAll();
+	}
+
+	@DisplayName("Integration test test for insert operation")
+	@Test
+	void givenEmployeeObject_whenCreateEmployee_thenReturnSavedObject() throws Exception {
+		Employee employee = new Employee("raj", 6000);
+		
+		ResultActions response = mockMvc.perform(post("/api/employees")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(employee)));
+		
+		response.andDo(print())
+		.andExpect((status().isCreated()))
+		.andExpect(jsonPath("$.name", is(employee.getName())));
+		
+				
+	}
+	
+	@AfterEach
+	void tearDown() throws Exception {
+	}
+
+
+}
+
+
+
+
+
+
