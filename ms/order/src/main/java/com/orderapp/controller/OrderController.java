@@ -31,16 +31,16 @@ public class OrderController {
 	public OrderResponse  addOrder(@RequestBody  OrderRequest orderRequest) {
 		//we get customer infor
 		Customer customer=restTemplate
-				.getForObject("http://localhost:8081/customerapp/customers/"+orderRequest.getCid(), Customer.class);
+				.getForObject("http://CUSTOMER-APP/customerapp/customers/"+orderRequest.getCid(), Customer.class);
 		
 		//we get product infr
 		Product product=restTemplate
-				.getForObject("http://localhost:8082/productapp/products/"+orderRequest.getPid(), Product.class);
+				.getForObject("http://PRODUCT-APP/productapp/products/"+orderRequest.getPid(), Product.class);
 		
 		
 		//we get discount coupon
 		Coupon coupon=restTemplate
-				.getForObject("http://localhost:8085/couponapp/coupons/"+orderRequest.getDiscountCoupon(), Coupon.class);
+				.getForObject("http://COUPON-APP/couponapp/coupons/"+orderRequest.getDiscountCoupon(), Coupon.class);
 		
 		OrderResponse orderResponse=new OrderResponse();
 		orderResponse.setId(UUID.randomUUID().toString());
